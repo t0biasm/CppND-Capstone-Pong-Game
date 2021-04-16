@@ -2,78 +2,46 @@
 #include <cmath>
 #include <iostream>
 
+// Constructor
+Board::Board(int grid_width, int grid_height, int board_length) : grid_width(grid_width), grid_height(grid_height) {
+	SDL_Point board_point;
+	for (int i = 0; i < board_length; i++) {
+		board_point.x = static_cast<int>(1);
+		board_point.y = static_cast<int>(grid_height/2 - board_length/2 + i);
+		body.push_front(board_point);
+	}
+};
+
+//Update Board
 void Board::Update() {
-  SDL_Point prev_cell{
-      static_cast<int>(head_x),
-      static_cast<int>(
-          head_y)};  // We first capture the head's cell before updating.
-  UpdateHead();
-  SDL_Point current_cell{
-      static_cast<int>(head_x),
-      static_cast<int>(head_y)};  // Capture the head's cell after updating.
+	if(this->direction == Direction::kDown) {
+		// Fetch highst point of board
+		SDL_Point end_down = this->body.front();
 
-  // Update all of the body vector items if the snake head has moved to a new
-  // cell.
-  if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
-    UpdateBody(current_cell, prev_cell);
-  }
-}
+		// Check if board at bottom of screen
+		if(end_down.y != grid_height-1) {
+			// Create new point based on oldest highest point
+			SDL_Point new_end_down = end_down;
+			new_end_down.y += 1;
 
-void Board::UpdateHead() {
-  switch (direction) {
-    case Direction::kUp:
-      head_y -= speed;
-      break;
+			// Add point to the board
+			this->body.push_front(new_end_down);
+			this->body.pop_back();
+		} 
+	}
+	else if (this->direction == Direction::kUp) {
+		// Fetch lowest point of board
+		SDL_Point end_up = this->body.back();
 
-    case Direction::kDown:
-      head_y += speed;
-      break;
+		// Check if board at bottom of screen
+		if(end_up.y != 0) {
+			// Create new point based on oldest lowest point
+			SDL_Point new_end_up = end_up;
+			new_end_up.y -= 1;
 
-    case Direction::kLeft:
-      head_x -= speed;
-      break;
-
-    case Direction::kRight:
-      head_x += speed;
-      break;
-  }
-
-  // Wrap the Snake around to the beginning if going off of the screen.
-  head_x = fmod(head_x + grid_width, grid_width);
-  head_y = fmod(head_y + grid_height, grid_height);
-}
-
-void Board::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {
-  // Add previous head location to vector
-  body.push_back(prev_head_cell);
-
-  if (!growing) {
-    // Remove the tail from the vector.
-    body.erase(body.begin());
-  } else {
-    growing = false;
-    size++;
-  }
-
-  // Check if the snake has died.
-  for (auto const &item : body) {
-    if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
-      alive = false;
-    }
-  }
-}
-
-void Board::GrowBody() { growing = true; }
-
-// Inefficient method to check if cell is occupied by snake.
-bool Board::BoardCell(int x, int y) {
-  if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) {
-    return true;
-  }
-  for (auto const &item : body) {
-    if (x == item.x && y == item.y) {
-      return true;
-    }
-  }
-  return false;
+			// Add point to the board
+			this->body.push_back(new_end_up);
+			this->body.pop_front();
+		}
+	}
 }
