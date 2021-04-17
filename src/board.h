@@ -7,12 +7,14 @@
 class Board {
 	public:
 		enum class Direction { kUp, kDown, kStay };
+		enum class State { victory, loss, ongoing };
 
 		// Constructor
 		Board(int grid_width, int grid_height, int board_length);
 
 		void Update();
 
+		State state = State::ongoing;
 		Direction direction;
 
 		float speed{0.1f};

@@ -47,6 +47,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-  	board.Update();
+  	if (board.state == Board::State::loss) return;
+	board.Update();
+	ball.MoveBall(&board);
 	board.direction = Board::Direction::kStay;
 }
