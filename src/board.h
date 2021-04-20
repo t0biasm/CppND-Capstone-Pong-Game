@@ -10,7 +10,7 @@ class Board {
 		enum class State { victory, loss, ongoing };
 
 		// Constructor
-		Board(int grid_width, int grid_height, int board_length);
+		Board(int grid_width, int grid_height, int board_length, bool opponent);
 
 		void Update();
 

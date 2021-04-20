@@ -3,10 +3,15 @@
 #include <iostream>
 
 // Constructor
-Board::Board(int grid_width, int grid_height, int board_length) : grid_width(grid_width), grid_height(grid_height) {
+Board::Board(int grid_width, int grid_height, int board_length, bool opponent) : grid_width(grid_width), grid_height(grid_height) {
 	SDL_Point board_point;
 	for (int i = 0; i < board_length; i++) {
-		board_point.x = static_cast<int>(1);
+		if(opponent == false) {
+			board_point.x = static_cast<int>(1);
+		}
+		else {
+			board_point.x = static_cast<int>(grid_width-2);
+		}
 		board_point.y = static_cast<int>(grid_height/2 - board_length/2 + i);
 		body.push_front(board_point);
 	}

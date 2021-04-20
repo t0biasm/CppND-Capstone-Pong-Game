@@ -4,7 +4,11 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height) : board(grid_width, grid_height, 5), ball(grid_width, grid_height) {}
+Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
+	for(int i = 0; i < this->numBoards; i++) {
+		boards.emplace_back(Board(grid_width, grid_height, 5, i));
+	}
+}
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                 std::size_t target_frame_duration) {
@@ -19,9 +23,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 		frame_start = SDL_GetTicks();
 
 		// Input, Update, Render - the main game loop.
-		controller.HandleInput(running, board);
+		controller.HandleInput(running, boards);
 		Update();
-		renderer.Render(board, ball);
+		renderer.Render(boards, ball);
 
 		frame_end = SDL_GetTicks();
 
@@ -47,8 +51,12 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-  	if (board.state == Board::State::loss) return;
-	board.Update();
-	ball.MoveBall(&board);
-	board.direction = Board::Direction::kStay;
+	for(auto it = boards.begin(); it != boards.end(); ++it) {
+		if(it->state == Board::State::loss) {
+			return;
+		}
+		it->Update();
+		it->direction = Board::Direction::kStay;
+	}
+	ball.MoveBall(&boards);
 }

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <random>
+#include <vector>
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
@@ -14,9 +15,11 @@ class Game {
 		void Run(Controller const &controller, Renderer &renderer,
 				std::size_t target_frame_duration);
 
+		std::vector<Board> boards = {};
+		
 	private:
-		Board board;
 		Ball ball;
+		int numBoards = 2;
 
 		void Update();
 };

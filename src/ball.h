@@ -2,7 +2,9 @@
 #define BALL_H
 
 #include <random>
+#include <vector>
 #include "SDL.h"
+#include "board.h"
 
 class Ball {
     public:
@@ -12,7 +14,7 @@ class Ball {
         Ball(int grid_width, int grid_height);
 
         // Function to update the ball
-        void MoveBall(Board *board);
+        void MoveBall(std::vector<Board> *boards);
 
         // Public variables:
         // Current position of the ball
@@ -20,7 +22,8 @@ class Ball {
 
     private:
         // Function to check whether the ball hits the board
-        bool IsBoardHitted(Board *board);
+        bool IsBoardHitted(std::vector<Board> boards);
+        bool IsBallOnGrid();
 
         // Private variables:
         // Current direction the ball moves
