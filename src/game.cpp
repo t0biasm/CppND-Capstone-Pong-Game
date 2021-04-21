@@ -2,6 +2,8 @@
 #include "board.h"
 #include "ball.h"
 #include <iostream>
+#include <future>
+#include <thread>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
@@ -51,12 +53,25 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-	for(auto it = boards.begin(); it != boards.end(); ++it) {
+	std::vector<std::future<void>> futures;
+	for(std::vector<Board>::iterator it = boards.begin(); it != boards.end(); ++it) {
 		if(it->state == Board::State::loss) {
 			return;
 		}
+		
+		// launch a thread that modifies the Vehicle name
+		futures.emplace_back(std::async([](Board board) {
+			board.Update();
+		},*it));
+
 		it->Update();
 		it->direction = Board::Direction::kStay;
 	}
+	
+	// wait for tasks to complete
+	for (const std::future<void> &ftr : futures) {
+		ftr.wait();
+	}
+
 	ball.MoveBall(&boards);
 }
