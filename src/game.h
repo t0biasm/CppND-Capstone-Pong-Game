@@ -3,6 +3,7 @@
 
 #include <random>
 #include <vector>
+#include <memory>
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
@@ -15,7 +16,8 @@ class Game {
 		void Run(Controller const &controller, Renderer &renderer,
 				std::size_t target_frame_duration);
 
-		std::vector<Board> boards = {};
+		//std::vector<Board> *boards = std::make_shared<std::vector<Board>>(numBoards);
+		std::vector<std::unique_ptr<Board>> boards;		
 		
 	private:
 		Ball ball;

@@ -21,7 +21,7 @@ Board::Board(int grid_width, int grid_height, int board_length, bool opponent) :
 void Board::Update() {
 	if(this->direction == Direction::kDown) {
 		// Fetch highst point of board
-		SDL_Point end_down = this->body.front();
+		SDL_Point end_down = body.front();
 
 		// Check if board at bottom of screen
 		if(end_down.y != grid_height-1) {
@@ -30,13 +30,13 @@ void Board::Update() {
 			new_end_down.y += 1;
 
 			// Add point to the board
-			this->body.push_front(new_end_down);
-			this->body.pop_back();
+			body.push_front(new_end_down);
+			body.pop_back();
 		} 
 	}
-	else if (this->direction == Direction::kUp) {
+	else if (direction == Direction::kUp) {
 		// Fetch lowest point of board
-		SDL_Point end_up = this->body.back();
+		SDL_Point end_up = body.back();
 
 		// Check if board at bottom of screen
 		if(end_up.y != 0) {
@@ -45,8 +45,8 @@ void Board::Update() {
 			new_end_up.y -= 1;
 
 			// Add point to the board
-			this->body.push_back(new_end_up);
-			this->body.pop_front();
+			body.push_back(new_end_up);
+			body.pop_front();
 		}
 	}
 }

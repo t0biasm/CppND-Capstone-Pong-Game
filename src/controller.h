@@ -3,10 +3,11 @@
 
 #include "board.h"
 #include <vector>
+#include <memory>
 
 class Controller {
     public:
-        void HandleInput(bool &running,  std::vector<Board> &boards) const;
+        void HandleInput(bool &running,  std::vector<std::unique_ptr<Board>> &boards) const;
 };
 
 #endif

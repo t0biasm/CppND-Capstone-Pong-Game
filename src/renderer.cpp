@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include <iostream>
 #include <string>
+#include <memory>
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -38,7 +39,7 @@ Renderer::~Renderer() {
     SDL_Quit();
 }
 
-void Renderer::Render(std::vector<Board> const boards, Ball const ball) {
+void Renderer::Render(std::vector<std::unique_ptr<Board>> const &boards, Ball const ball) {
     SDL_Rect block;
     block.w = screen_width / grid_width;
     block.h = screen_height / grid_height;
@@ -55,7 +56,7 @@ void Renderer::Render(std::vector<Board> const boards, Ball const ball) {
 
     // Render left board
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const &point : boards.at(0).body) {
+    for (SDL_Point const &point : boards.at(0)->body) {
       block.x = point.x * block.w;
       block.y = point.y * block.h;
       SDL_RenderFillRect(sdl_renderer, &block);
@@ -63,7 +64,7 @@ void Renderer::Render(std::vector<Board> const boards, Ball const ball) {
 
     // Render right board
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const &point : boards.at(1).body) {
+    for (SDL_Point const &point : boards.at(1)->body) {
       block.x = point.x * block.w;
       block.y = point.y * block.h;
       SDL_RenderFillRect(sdl_renderer, &block);

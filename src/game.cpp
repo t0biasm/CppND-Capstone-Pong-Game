@@ -4,11 +4,13 @@
 #include <iostream>
 #include <future>
 #include <thread>
+#include <memory>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
-	for(int i = 0; i < this->numBoards; i++) {
-		boards.emplace_back(Board(grid_width, grid_height, 5, i));
+	for(int i = 0; i < numBoards; i++) {
+		boards.emplace_back(std::make_unique<Board>(grid_width, grid_height, 5, i));
+		// boards.emplace_back(std::unique_ptr<Board>(new Board(grid_width, grid_height, 5, i)));
 	}
 }
 
@@ -54,18 +56,18 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::Update() {
 	std::vector<std::future<void>> futures;
-	for(std::vector<Board>::iterator it = boards.begin(); it != boards.end(); ++it) {
-		if(it->state == Board::State::loss) {
+	for(auto it = boards.begin(); it != boards.end(); ++it) {
+		if((*it)->state == Board::State::loss) {
 			return;
 		}
 		
 		// launch a thread that modifies the Vehicle name
 		futures.emplace_back(std::async([](Board board) {
 			board.Update();
-		},*it));
+		},std::move(*(*it))));
 
-		it->Update();
-		it->direction = Board::Direction::kStay;
+		(*it)->Update();
+		(*it)->direction = Board::Direction::kStay;
 	}
 	
 	// wait for tasks to complete
@@ -73,5 +75,5 @@ void Game::Update() {
 		ftr.wait();
 	}
 
-	ball.MoveBall(&boards);
+	ball.MoveBall(boards);
 }

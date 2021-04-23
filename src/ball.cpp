@@ -8,9 +8,9 @@ Ball::Ball(int grid_width, int grid_height) : grid_width(grid_width), grid_heigh
     pos({static_cast<int>(grid_width/2), static_cast<int>(grid_height/2)}), 
     heading(Heading::northWest) {}
 
-bool Ball::IsBoardHitted(std::vector<Board> boards) {
-    for(std::vector<Board>::iterator it = boards.begin(); it != boards.end(); ++it) {
-        for(auto iter = it->body.begin(); iter != it->body.end(); ++iter ) {
+bool Ball::IsBoardHitted(std::vector<std::unique_ptr<Board>> &boards) {
+    for(auto it = boards.begin(); it != boards.end(); ++it) {
+        for(auto iter = (*it)->body.begin(); iter != (*it)->body.end(); ++iter ) {
             if(iter->x == pos.x && (iter->y == pos.y || (pos.y < 0 && iter->y == 0) || (pos.y >= grid_height && iter->y == grid_height-1))) {
                 return true;
             }
@@ -28,18 +28,18 @@ bool Ball::IsBallOnGrid() {
     }
 }
 
-void Ball::MoveBall(std::vector<Board> *boards) {
+void Ball::MoveBall(std::vector<std::unique_ptr<Board>> &boards) {
     if(counter % 5 == 0) {
         if(heading == Heading::northWest) {
             pos.x -= 1;
             pos.y -= 1;
             if(IsBallOnGrid()) {
-                if(IsBoardHitted(*boards)){
+                if(IsBoardHitted(boards)){
                     pos.x += 2;
                     heading = Heading::northEast;
                 }
                 if(pos.x == 0) {
-                    (*boards).at(0).state = Board::State::loss;
+                    boards.at(0)->state = Board::State::loss;
                 }
             } else {
                 pos.y += 1;
@@ -50,15 +50,15 @@ void Ball::MoveBall(std::vector<Board> *boards) {
             pos.x += 1;
             pos.y += 1;
             if(IsBallOnGrid()) {
-                if(IsBoardHitted(*boards)){
+                if(IsBoardHitted(boards)){
                     pos.x -= 2;
                     heading = Heading::southWest;
                 }
                 if(pos.x == grid_width-1) {
-                    (*boards).at(1).state = Board::State::loss;
+                    boards.at(0)->state = Board::State::loss;
                 }
             } else {
-                if(IsBoardHitted(*boards)) {
+                if(IsBoardHitted(boards)) {
                     pos.x -= 2;
                     pos.y -= 2;
                     heading = Heading::northWest;
@@ -73,15 +73,15 @@ void Ball::MoveBall(std::vector<Board> *boards) {
             pos.x += 1;
             pos.y -= 1;
             if(IsBallOnGrid()) {
-                if(IsBoardHitted(*boards)){
+                if(IsBoardHitted(boards)){
                     pos.x -= 2;
                     heading = Heading::northWest;
                 }
                 if(pos.x == grid_width-1) {
-                    (*boards).at(1).state = Board::State::loss;
+                    boards.at(0)->state = Board::State::loss;
                 }
             } else {
-                if(IsBoardHitted(*boards)) {
+                if(IsBoardHitted(boards)) {
                     pos.x -= 2;
                     pos.y += 2;
                     heading = Heading::southWest;
@@ -96,15 +96,15 @@ void Ball::MoveBall(std::vector<Board> *boards) {
             pos.x -= 1;
             pos.y += 1;
             if(IsBallOnGrid()) {
-                if(IsBoardHitted(*boards)){
+                if(IsBoardHitted(boards)){
                     pos.x += 2;
                     heading = Heading::southEast;
                 }
                 if(pos.x == 0) {
-                    (*boards).at(0).state = Board::State::loss;
+                    boards.at(0)->state = Board::State::loss;
                 }
             } else {
-                if(IsBoardHitted(*boards)) {
+                if(IsBoardHitted(boards)) {
                     pos.x += 2;
                     pos.y -= 2;
                     heading = Heading::northEast;

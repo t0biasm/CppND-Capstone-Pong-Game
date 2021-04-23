@@ -14,7 +14,7 @@ class Ball {
         Ball(int grid_width, int grid_height);
 
         // Function to update the ball
-        void MoveBall(std::vector<Board> *boards);
+        void MoveBall(std::vector<std::unique_ptr<Board>> &boards);
 
         // Public variables:
         // Current position of the ball
@@ -22,7 +22,7 @@ class Ball {
 
     private:
         // Function to check whether the ball hits the board
-        bool IsBoardHitted(std::vector<Board> boards);
+        bool IsBoardHitted(std::vector<std::unique_ptr<Board>> &boards);
         bool IsBallOnGrid();
 
         // Private variables:
