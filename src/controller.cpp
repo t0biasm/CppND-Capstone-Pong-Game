@@ -9,13 +9,6 @@ void Controller::HandleInput(bool &running, std::vector<Board> &boards) const {
 		if (e.type == SDL_QUIT) {
 			running = false;
 		} 
-		// else if (e.type == SDL_KEYDOWN) {
-		// 	if (e.key.keysym.sym==SDLK_w) boards.front().direction = Board::Direction::kUp;
-		// 	if (e.key.keysym.sym==SDLK_s) boards.front().direction = Board::Direction::kDown;
-		// 	if (e.key.keysym.sym==SDLK_UP) boards.back().direction = Board::Direction::kUp;
-		// 	if (e.key.keysym.sym==SDLK_DOWN) boards.back().direction = Board::Direction::kDown;
-		// 	break;
-		// }
 	}
 
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
