@@ -17,9 +17,56 @@ Board::Board(int grid_width, int grid_height, int board_length, bool opponent) :
 	}
 };
 
-//Update Board
+// Copy Constructor
+Board::Board(const Board &board) {
+	// std::cout << "COPYING content of instance " << &board << " to instance " << this << std::endl;
+	body = board.body;
+	grid_width = board.grid_width;
+	grid_height = board.grid_height;
+}
+
+// Copy Assignment Constructor
+Board &Board::operator=(const Board &board) {
+	// std::cout << "ASSIGNING content of instance " << &board << " to instance " << this << std::endl;
+	
+	if (this == &board) return *this;
+	
+	body = board.body;
+	grid_width = board.grid_width;
+	grid_height = board.grid_height;
+	
+	return *this;
+}
+
+// Move Constructor
+Board::Board(Board &&board) : body(std::move(board.body)) {
+	// std::cout << "MOVING (c’tor) instance " << &board << " to instance " << this << std::endl;
+	grid_width = board.grid_width;
+	grid_height = board.grid_height;
+	
+	board.grid_width = 0;
+	board.grid_height = 0;
+}
+
+// Move Assignment Constructor
+Board &Board::operator=(Board &&board) {
+	// std::cout << "MOVING (assign) instance " << &board << " to instance " << this << std::endl;
+
+	body = std::move(board.body);
+	
+	grid_width = board.grid_width;
+	grid_height = board.grid_height;
+	
+	board.grid_width = 0;
+	board.grid_height = 0;
+	
+	return *this;
+}
+
+// Update Board
 void Board::Update() {
-	if(this->direction == Direction::kDown) {
+	//std::cout << this->state << std::endl;
+	if(direction == Direction::kDown) {
 		// Fetch highst point of board
 		SDL_Point end_down = body.front();
 

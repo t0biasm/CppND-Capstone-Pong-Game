@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <deque>
+#include <iostream>
 #include "SDL.h"
 
 class Board {
@@ -12,53 +13,27 @@ class Board {
 		// Constructor
 		Board(int grid_width, int grid_height, int board_length, bool opponent);
 
-		// // Destructor
-		// ~Board();
+		// Destructor
+		~Board() {
+			//std::cout << "DELETING instance of MyMovableClass at " << this << std::endl;
+		};
 
 		// Copy Constructor
-		Board(const Board &board) {
-			body = board.body;
-			grid_width = board.grid_width;
-			grid_height = board.grid_height;
-		}
+		Board(const Board &board);
 
 		// Copy Assignment Constructor
-		Board &operator=(const Board &board) {
-			if (this == &board) return *this;
-			
-			body = board.body;
-			grid_width = board.grid_width;
-			grid_height = board.grid_height;
-			
-			return *this;
-		}
+		Board &operator=(const Board &board);
 
 		// Move Constructor
-		Board(Board &&board) : body(std::move(board.body)) {
-			grid_width = board.grid_width;
-			grid_height = board.grid_height;
-			
-			board.grid_width = 0;
-			board.grid_height = 0;
-		}
+		Board(Board &&board);
 
 		// Move Assignment Constructor
-		Board &operator=(Board &&board) {
-			body = std::move(board.body);
-			
-			grid_width = board.grid_width;
-			grid_height = board.grid_height;
-			
-			board.grid_width = 0;
-			board.grid_height = 0;
-    		
-			return *this;
-		}
+		Board &operator=(Board &&board);
 
 		void Update();
 
 		State state = State::ongoing;
-		Direction direction;
+		Direction direction = Direction::kStay;
 
 		float speed{0.1f};
 		// first SDL_Point of vector represents upper point and last one represents lowest point

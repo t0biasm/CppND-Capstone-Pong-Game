@@ -13,7 +13,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(std::vector<std::unique_ptr<Board>> const &boards, Ball const ball);
+  void Render(std::vector<std::unique_ptr<Board>> &boards, Ball const ball);
 
  private:
   SDL_Window *sdl_window;

@@ -6,7 +6,7 @@
 
 Ball::Ball(int grid_width, int grid_height) : grid_width(grid_width), grid_height(grid_height),
     pos({static_cast<int>(grid_width/2), static_cast<int>(grid_height/2)}), 
-    heading(Heading::northWest) {}
+    heading(Heading(1)) {}
 
 bool Ball::IsBoardHitted(std::vector<std::unique_ptr<Board>> &boards) {
     for(auto it = boards.begin(); it != boards.end(); ++it) {

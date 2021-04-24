@@ -9,7 +9,9 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
 	for(int i = 0; i < numBoards; i++) {
-		boards.emplace_back(std::make_unique<Board>(grid_width, grid_height, 5, i));
+		std::unique_ptr<Board> board = std::make_unique<Board>(grid_width, grid_height, 5, i);
+		boards.emplace_back(std::move(board));
+		// boards.emplace_back(std::move(std::make_unique<Board>(grid_width, grid_height, 5, i)));
 		// boards.emplace_back(std::unique_ptr<Board>(new Board(grid_width, grid_height, 5, i)));
 	}
 }
@@ -56,24 +58,61 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::Update() {
 	std::vector<std::future<void>> futures;
-	for(auto it = boards.begin(); it != boards.end(); ++it) {
-		if((*it)->state == Board::State::loss) {
-			return;
-		}
+	// for(auto board : boards) {
+	// 	if(board->state == Board::State::loss) {
+	// 		return;
+	// 	}
 		
-		// launch a thread that modifies the Vehicle name
-		futures.emplace_back(std::async([](Board board) {
-			board.Update();
-		},std::move(*(*it))));
+	// 	// launch a thread that modifies the Vehicle name
+	// 	futures.emplace_back(std::async([](Board board) {
+	// 		board.Update();
+	// 	},std::move(*board)));
 
-		(*it)->Update();
-		(*it)->direction = Board::Direction::kStay;
-	}
-	
-	// wait for tasks to complete
-	for (const std::future<void> &ftr : futures) {
-		ftr.wait();
-	}
+	// 	// (*it)->Update();
+	// 	board->direction = Board::Direction::kStay;
+	// }
+
+	// for(auto it = boards.begin(); it != boards.end(); ++it) {
+	// 	if((*it)->state == Board::State::loss) {
+	// 		return;
+	// 	}
+		
+	// 	// // use async to start a task
+	// 	// std::future<Board> ftr = std::async(std::launch::async,
+	// 	// 	[std::move(*(*it))]() {
+	// 	// 		board.Update();
+	// 	// 	}
+	// 	// );
+
+	// 	std::future<Board> ftr = std::async(std::launch::async, [](Board board) {
+	// 		board.Update();
+	// 	}, std::move(*(*it)));
+
+	// 	futures.emplace_back(ftr);
+
+	// 	// (*it)->Update();
+	// 	(*it)->direction = Board::Direction::kStay;
+	// }
+
+	std::future<void> ftr = std::async(std::launch::async, 
+		[this]() {
+			for(auto it = boards.begin(); it != boards.end(); ++it) {
+				if((*it)->state == Board::State::loss) {
+					return;
+				}
+				(*it)->Update();
+				(*it)->direction = Board::Direction::kStay;
+			}
+		}
+	);
+
+	ftr.get();
+
+	// // wait for tasks to complete
+	// for (const std::future<Board> &ftr : futures) {
+	// 	ftr.get();
+	// 	//ftr.wait();
+	// }
 
 	ball.MoveBall(boards);
 }

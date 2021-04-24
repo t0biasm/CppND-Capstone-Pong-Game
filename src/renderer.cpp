@@ -39,7 +39,7 @@ Renderer::~Renderer() {
     SDL_Quit();
 }
 
-void Renderer::Render(std::vector<std::unique_ptr<Board>> const &boards, Ball const ball) {
+void Renderer::Render(std::vector<std::unique_ptr<Board>> &boards, Ball const ball) {
     SDL_Rect block;
     block.w = screen_width / grid_width;
     block.h = screen_height / grid_height;
@@ -56,7 +56,8 @@ void Renderer::Render(std::vector<std::unique_ptr<Board>> const &boards, Ball co
 
     // Render left board
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const &point : boards.at(0)->body) {
+    // std::cout << (((boards.front())->body).front()).x << std::endl;
+    for (SDL_Point const &point : boards.front()->body) {
       block.x = point.x * block.w;
       block.y = point.y * block.h;
       SDL_RenderFillRect(sdl_renderer, &block);
@@ -64,7 +65,7 @@ void Renderer::Render(std::vector<std::unique_ptr<Board>> const &boards, Ball co
 
     // Render right board
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const &point : boards.at(1)->body) {
+    for (SDL_Point const &point : boards.back()->body) {
       block.x = point.x * block.w;
       block.y = point.y * block.h;
       SDL_RenderFillRect(sdl_renderer, &block);
