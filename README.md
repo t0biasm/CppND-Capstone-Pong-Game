@@ -4,6 +4,10 @@ This is my version of the Capstone project in the [Udacity C++ Nanodegree Progra
 
 <img src="PongGame.gif"/>
 
+The Pong Game provided inside this repository represents a two player game, where each of the two boards is getting controlled via the keyboard.
+The left board gets controlled via the keys W (Up) and S (Down) whereas the right board gets controlled via the arrow keys Up and Down.
+During the game, the ball will increase its speed so that it gets harder the longer both of the player survive.
+
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
