@@ -29,7 +29,7 @@ bool Ball::IsBallOnGrid() {
 }
 
 void Ball::MoveBall(std::vector<std::unique_ptr<Board>> &boards) {
-    if(counter % 5 == 0) {
+    if(counter % speed == 0) {
         if(heading == Heading::northWest) {
             pos.x -= 1;
             pos.y -= 1;
