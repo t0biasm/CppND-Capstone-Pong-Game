@@ -11,6 +11,7 @@ void Controller::HandleInput(bool &running, std::vector<std::unique_ptr<Board>> 
 		} 
 	}
 
+	// Check which keys are pressed and keep state till it gets reset later on for new sequence.
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
     //continuous-response keys
     if (keystate[SDL_SCANCODE_W]) boards.front()->direction = Board::Direction::kUp;

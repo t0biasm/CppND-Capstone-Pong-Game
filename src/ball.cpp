@@ -29,7 +29,9 @@ bool Ball::IsBallOnGrid() {
 }
 
 void Ball::MoveBall(std::vector<std::unique_ptr<Board>> &boards) {
+    // Slow down the game by only updating the ball every nth time
     if(counter % speed == 0) {
+        // Due to heading of the ball, check if board/wall is hitted
         if(heading == Heading::northWest) {
             pos.x -= 1;
             pos.y -= 1;
@@ -116,5 +118,6 @@ void Ball::MoveBall(std::vector<std::unique_ptr<Board>> &boards) {
             }
         }
     }
+    // increase counter for set speed of game (top of this function)
     ++counter;
 }

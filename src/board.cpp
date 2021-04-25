@@ -5,6 +5,8 @@
 // Constructor
 Board::Board(int grid_width, int grid_height, int board_length, bool opponent) : grid_width(grid_width), grid_height(grid_height) {
 	SDL_Point board_point;
+
+	// Construct initial board position
 	for (int i = 0; i < board_length; i++) {
 		if(opponent == false) {
 			board_point.x = static_cast<int>(1);

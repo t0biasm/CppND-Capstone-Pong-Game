@@ -8,11 +8,10 @@
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
+	// Initalize boards with unique ptrs
 	for(int i = 0; i < numBoards; i++) {
 		std::unique_ptr<Board> board = std::make_unique<Board>(grid_width, grid_height, 5, i);
 		boards.emplace_back(std::move(board));
-		// boards.emplace_back(std::move(std::make_unique<Board>(grid_width, grid_height, 5, i)));
-		// boards.emplace_back(std::unique_ptr<Board>(new Board(grid_width, grid_height, 5, i)));
 	}
 }
 
@@ -56,23 +55,29 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-	std::vector<std::future<void>> futures;
-	
+	// Check if one of both players (boards) has already lost
 	for(auto it = boards.begin(); it != boards.end(); ++it) {
 		if((*it)->state == Board::State::loss) {
 			return;
 		}
 	}
-		
+
+	// Run board update inside of new task		
 	std::future<void> ftr = std::async(std::launch::async, 
 		[this]() {
 			for(auto it = boards.begin(); it != boards.end(); ++it) {
+				// Update board position
 				(*it)->Update();
+
+				// Reset captured keyboard input for boards
 				(*it)->direction = Board::Direction::kStay;
 			}
 		}
 	);
+
+	// Wait till execution of task has finished
 	ftr.get();
 
+	// Update position of ball
 	ball.MoveBall(boards);
 }

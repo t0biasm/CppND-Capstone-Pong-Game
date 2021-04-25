@@ -13,6 +13,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
+  // Function to render both of the boards as well as the ball
   void Render(std::vector<std::unique_ptr<Board>> &boards, Ball const ball);
 
  private:

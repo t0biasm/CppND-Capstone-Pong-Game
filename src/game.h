@@ -16,11 +16,12 @@ class Game {
 		void Run(Controller const &controller, Renderer &renderer,
 				std::size_t target_frame_duration);
 
-		//std::vector<Board> *boards = std::make_shared<std::vector<Board>>(numBoards);
+		// Via a vector on the stack, store boards on the heap.
 		std::vector<std::unique_ptr<Board>> boards;		
 		
 	private:
 		Ball ball;
+
 		int numBoards = 2;
 
 		void Update();

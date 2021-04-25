@@ -10,29 +10,24 @@ class Board {
 		enum class Direction { kUp, kDown, kStay };
 		enum class State { victory, loss, ongoing };
 
-		// Constructor
+		// Basic Constructor
 		Board(int grid_width, int grid_height, int board_length, bool opponent);
-
-		// Destructor
+		
+		// Rule of Five
+		Board(const Board &board);
+		Board &operator=(const Board &board);
+		Board(Board &&board);
+		Board &operator=(Board &&board);
 		~Board() {
 			//std::cout << "DELETING instance of MyMovableClass at " << this << std::endl;
 		};
 
-		// Copy Constructor
-		Board(const Board &board);
-
-		// Copy Assignment Constructor
-		Board &operator=(const Board &board);
-
-		// Move Constructor
-		Board(Board &&board);
-
-		// Move Assignment Constructor
-		Board &operator=(Board &&board);
-
+		// Member function to update board position
 		void Update();
 
+		// Current game state of board
 		State state = State::ongoing;
+		// Current direction the board is heading to
 		Direction direction = Direction::kStay;
 
 		float speed{0.1f};

@@ -13,17 +13,20 @@ class Ball {
         // Constructor
         Ball(int grid_width, int grid_height);
 
-        // Function to update the ball
+        // Function to update the position of the ball
         void MoveBall(std::vector<std::unique_ptr<Board>> &boards);
 
         // Public variables:
         // Current position of the ball
 		SDL_Point pos;
+
+        // Variable to handle the speed of the ball
         int speed = 5;
 
     private:
         // Function to check whether the ball hits the board
         bool IsBoardHitted(std::vector<std::unique_ptr<Board>> &boards);
+        // Member function to check if new position of the ball is still on the grid
         bool IsBallOnGrid();
 
         // Private variables:
