@@ -15,7 +15,7 @@ class Board {
 
 		// Destructor
 		~Board() {
-			//std::cout << "DELETING instance of MyMovableClass at " << this << std::endl;
+			std::cout << "DELETING instance at " << this << std::endl;
 		};
 
 		// Copy Constructor
@@ -30,12 +30,11 @@ class Board {
 		// Move Assignment Constructor
 		Board &operator=(Board &&board);
 
-		void Update();
+		Board Update();
 
 		State state = State::ongoing;
 		Direction direction = Direction::kStay;
 
-		float speed{0.1f};
 		// first SDL_Point of vector represents upper point and last one represents lowest point
 		std::deque<SDL_Point> body;
 

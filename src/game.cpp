@@ -9,10 +9,7 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height) : ball(grid_width, grid_height) {
 	for(int i = 0; i < numBoards; i++) {
-		std::unique_ptr<Board> board = std::make_unique<Board>(grid_width, grid_height, 5, i);
-		boards.emplace_back(std::move(board));
-		// boards.emplace_back(std::move(std::make_unique<Board>(grid_width, grid_height, 5, i)));
-		// boards.emplace_back(std::unique_ptr<Board>(new Board(grid_width, grid_height, 5, i)));
+		boards.emplace_back(std::make_unique<Board>(grid_width, grid_height, 5, i));
 	}
 }
 
@@ -40,11 +37,12 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 		frame_count++;
 		frame_duration = frame_end - frame_start;
 
-		// After every 15 seconds, increase speed.
-		if (frame_end - title_timestamp >= 15000) {
-			ball.speed -= 1;
-			title_timestamp = frame_end;
-		}
+		// // After every second, update the window title.
+		// if (frame_end - title_timestamp >= 1000) {
+		// 	renderer.UpdateWindowTitle(score, frame_count);
+		// 	frame_count = 0;
+		// 	title_timestamp = frame_end;
+		// }
 
 		// If the time for this frame is too small (i.e. frame_duration is
 		// smaller than the target ms_per_frame), delay the loop to
@@ -56,23 +54,35 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-	std::vector<std::future<void>> futures;
-	
+	std::vector<std::future<std::unique_ptr<Board>>> futures;
+
+	std::promise<std::unique_ptr<Board>> prms;
+    std::future<std::unique_ptr<Board>> ftr = prms.get_future();
+
 	for(auto it = boards.begin(); it != boards.end(); ++it) {
+		//it = std::move(boards.erase(it));
 		if((*it)->state == Board::State::loss) {
 			return;
 		}
+
+		futures.emplace_back(std::async(
+            [b = std::move(*it)]() mutable {
+                b->Update();
+				return std::move(b);
+            })
+		);
 	}
-		
-	std::future<void> ftr = std::async(std::launch::async, 
-		[this]() {
-			for(auto it = boards.begin(); it != boards.end(); ++it) {
-				(*it)->Update();
-				(*it)->direction = Board::Direction::kStay;
-			}
-		}
-	);
-	ftr.get();
+
+	// int index = 0;
+	// wait for tasks to complete
+	for (std::future<std::unique_ptr<Board>>& ftr : futures) {
+		ftr.wait();
+		boards.emplace_back(ftr.get());
+	}
+
+	while(boards.size()>2) {
+		boards.erase(boards.begin());
+	}
 
 	ball.MoveBall(boards);
 }

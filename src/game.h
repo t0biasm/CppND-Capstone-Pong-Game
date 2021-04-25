@@ -16,7 +16,7 @@ class Game {
 		void Run(Controller const &controller, Renderer &renderer,
 				std::size_t target_frame_duration);
 
-		//std::vector<Board> *boards = std::make_shared<std::vector<Board>>(numBoards);
+		//std::vector<Board> *boards = std::make_unique<std::vector<Board>>(numBoards);
 		std::vector<std::unique_ptr<Board>> boards;		
 		
 	private:

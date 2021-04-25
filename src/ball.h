@@ -19,7 +19,7 @@ class Ball {
         // Public variables:
         // Current position of the ball
 		SDL_Point pos;
-        int speed = 5;
+        double speed = 0.1;
 
     private:
         // Function to check whether the ball hits the board

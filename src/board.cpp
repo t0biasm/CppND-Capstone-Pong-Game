@@ -40,7 +40,7 @@ Board &Board::operator=(const Board &board) {
 
 // Move Constructor
 Board::Board(Board &&board) : body(std::move(board.body)) {
-	// std::cout << "MOVING (c’tor) instance " << &board << " to instance " << this << std::endl;
+	std::cout << "MOVING (c’tor) instance " << &board << " to instance " << this << std::endl;
 	grid_width = board.grid_width;
 	grid_height = board.grid_height;
 	
@@ -50,7 +50,7 @@ Board::Board(Board &&board) : body(std::move(board.body)) {
 
 // Move Assignment Constructor
 Board &Board::operator=(Board &&board) {
-	// std::cout << "MOVING (assign) instance " << &board << " to instance " << this << std::endl;
+	std::cout << "MOVING (assign) instance " << &board << " to instance " << this << std::endl;
 
 	body = std::move(board.body);
 	
@@ -64,7 +64,7 @@ Board &Board::operator=(Board &&board) {
 }
 
 // Update Board
-void Board::Update() {
+Board Board::Update() {
 	//std::cout << this->state << std::endl;
 	if(direction == Direction::kDown) {
 		// Fetch highst point of board
