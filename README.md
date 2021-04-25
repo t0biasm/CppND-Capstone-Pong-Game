@@ -30,6 +30,33 @@ During the game, the ball will increase its speed so that it gets harder the lon
 3. Compile: `cmake .. && make`
 4. Run it: `./PongGame`.
 
+## Rubric points addressed
+### Loops, Functions, I/O
+| Rubric point  | Location |
+| ------------- | ------------- |
+| The project demonstrates an understanding of C++ functions and control structures.  |   Yes, check all the files
+| The project accepts user input and processes the input. | [Controller](src/controller.cpp)
+
+### Object Oriented Programming
+| Rubric point  | Location |
+| ------------- | ------------- |
+| The project uses Object Oriented Programming techniques.  |   Yes, check all the files
+| Classes use appropriate access specifiers for class members. | Yes, check all the files
+| Class constructors utilize member initialization lists. | Yes, check all the files
+| Classes abstract implementation details from their interfaces. | Yes, check all the files
+| Classes encapsulate behavior. | Yes, check all the files
+
+### Memory Management
+| Rubric point  | Location |
+| ------------- | ------------- |
+| The project makes use of references in function declarations.  |   Yes, check all the files)
+| The project uses destructors appropriately. | [Board](src/board.h))
+| The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | Yes, check all the files
+| The project follows the Rule of 5. | Yes, check all the files
+| The project uses move semantics to move data, instead of copying it, where possible. | Yes, check all the files
+| The project uses smart pointers instead of raw pointers. | Yes, check [Game](src/game.cpp)
+
+
 
 ## CC Attribution-ShareAlike 4.0 International
 
